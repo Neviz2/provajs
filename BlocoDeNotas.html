@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloco de Notas</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+  <style>
+    
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      height: 100vh;
+      background-color: gray;
+    }
+
+    textarea {
+      width: 80vw;
+      height: 150px;
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    #suasnotas {
+      border: 1px solid black;
+      width: 80vw;
+      min-height: 150px;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: white;
+    }
+
+    .nota-item {
+      background-color: gray;
+      margin: 5px 0;
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .nota-item:hover {
+      background-color: rgb(77, 73, 73);
+    }
+  </style>
+</head>
+<body>
+  <h1>Bloco de Notas</h1>
+
+  <textarea id="notas" placeholder="Coloque seu texto aqui:"></textarea>
+
+  <!-- Botões -->
+  <div>
+    <button class="btn btn-outline-light" id="salvar">Salvar Nota</button>
+    <button class="btn btn-outline-light" id="limpar">Limpar Notas</button>
+  </div>
+
+  <!-- Onde as notas salvas serão exibidas -->
+  <div id="suasnotas">
+    <p>Suas notas:</p>
+  </div>
+  
+
+
+  <script>
+    const texto = document.querySelector("#notas");        // textarea onde a pessoa digita
+    const salvar = document.querySelector("#salvar");      // botão de salvar
+    const limpar = document.querySelector("#limpar");      // botão que limpa as notas 
+    const suasnotas = document.querySelector("#suasnotas"); // div onde as notas aparecem
+
+   
+    let indiceEditando = null;
+    // Quando clicar em "Salvar"
+    salvar.addEventListener("click", () => {
+      if (texto.value.trim() === "") {
+        alert("Sua nota está vazia");
+        return;
+      }
+
+      // Recupera o que já tem no localStorage ou cria um array vazio
+      let notas = JSON.parse(localStorage.getItem("notas")) || [];
+
+      if (indiceEditando !== null) {
+               notas[indiceEditando] = texto.value;
+               indiceEditando = null;
+            } else{
+            notas.push(texto.value);
+            }
+
+      // Salva de volta no localStorage strngify trasforma em string o json
+      localStorage.setItem("notas", JSON.stringify(notas));
+
+      alert("Nota salva com sucesso!");
+
+      // Limpa o campo de texto
+      texto.value = "";
+
+      // Atualiza a tela com as notas salvas
+      mostrar();
+    });
+
+
+
+    // Quando clicar em "limpar limpa o localstorage porem não o texto"
+    limpar.addEventListener("click", () => {
+      
+        localStorage.clear();
+        alert("Notas apagadas!");
+        mostrar();
+
+    });
+    
+    function mostrar() {
+
+      suasnotas.innerHTML = "<p>Suas notas:</p>";
+
+      const notas = JSON.parse(localStorage.getItem("notas")) || [];
+
+      for (let i = 0; i < notas.length; i++) {
+        const nota = notas[i];
+
+       
+        const div = document.createElement("div");
+        div.className = "nota-item";     // puxa o css 
+        div.textContent = nota;          
+
+
+        div.addEventListener("click", () => {
+            texto.value = nota;
+            indiceEditando = i;
+        });
+        
+        suasnotas.appendChild(div);
+      }
+    }
+    mostrar();
+  </script>
+</body>
+</html>

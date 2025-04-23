@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+
+  <style>
+    .container {
+      display: grid;
+      grid-template-areas:
+        'resposta resposta resposta resposta'
+        'n7 n8 n9 dividir'
+        'n4 n5 n6 multi'
+        'n1 n2 n3 menos'
+        'n0 ponto limpar adicao'
+        'enviar enviar enviar enviar';
+      gap: 5px;
+      max-width: 400px;
+      margin: auto;
+      height: 70vh;
+    }
+
+    #resposta {
+      margin-top: 20px;
+      grid-area: resposta;
+      background-color: black;
+      color: white;
+      font-size: 24px;
+      text-align: right;
+      padding: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+    
+    }
+
+    #adicao { grid-area: adicao; }
+    #menos { grid-area: menos; }
+    #multi { grid-area: multi; }
+    #dividir { grid-area: dividir; }
+    #limpar { grid-area: limpar; }
+    #ponto { grid-area: ponto; }
+    #enviar { grid-area: enviar; }
+    #n0 { grid-area: n0; }
+    #n1 { grid-area: n1; }
+    #n2 { grid-area: n2; }
+    #n3 { grid-area: n3; }
+    #n4 { grid-area: n4; }
+    #n5 { grid-area: n5; }
+    #n6 { grid-area: n6; }
+    #n7 { grid-area: n7; }
+    #n8 { grid-area: n8; }
+    #n9 { grid-area: n9; }
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="resposta"></div>
+    <button class="btn btn-primary num" id="n7">7</button>
+    <button class="btn btn-primary num" id="n8">8</button>
+    <button class="btn btn-primary num" id="n9">9</button>
+    <button class="btn btn-primary" id="dividir">/</button>
+    <button class="btn btn-primary num" id="n4">4</button>
+    <button class="btn btn-primary num" id="n5">5</button>
+    <button class="btn btn-primary num" id="n6">6</button>
+    <button class="btn btn-primary" id="multi">*</button>
+    <button class="btn btn-primary num" id="n1">1</button>
+    <button class="btn btn-primary num" id="n2">2</button>
+    <button class="btn btn-primary num" id="n3">3</button>
+    <button class="btn btn-primary" id="menos">-</button>
+    <button class="btn btn-primary num" id="n0">0</button>
+    <button class="btn btn-primary num" id="ponto">.</button>
+    <button class="btn btn-primary" id="limpar">C</button>
+    <button class="btn btn-primary" id="adicao">+</button>
+    <button class="btn btn-primary" id="enviar">=</button>
+  </div>
+
+  <script>
+    const visor = document.getElementById("resposta");
+    let expressao = "";
+
+    // Botões de número e ponto
+    const botoesNumeros = document.querySelectorAll(".num");
+    botoesNumeros.forEach(botao => {
+      botao.addEventListener("click", () => {
+        expressao += botao.textContent;
+        visor.textContent = expressao;
+      });
+    });
+
+    // Operadores
+    document.getElementById("adicao").addEventListener("click", () => {
+      expressao += "+";
+      visor.textContent = expressao;
+    });
+
+    document.getElementById("menos").addEventListener("click", () => {
+      expressao += "-";
+      visor.textContent = expressao;
+    });
+
+    document.getElementById("multi").addEventListener("click", () => {
+      expressao += "*";
+      visor.textContent = expressao;
+    });
+
+    document.getElementById("dividir").addEventListener("click", () => {
+      expressao += "/";
+      visor.textContent = expressao;
+    });
+
+    // Limpar
+    document.getElementById("limpar").addEventListener("click", () => {
+      expressao = "";
+      visor.textContent = "";
+    });
+
+    // Igual (=)
+    document.getElementById("enviar").addEventListener("click", () => {
+      try {
+        const resultado = eval(expressao);
+        visor.textContent = resultado;
+        expressao = resultado.toString();
+      } catch (error) {
+        visor.textContent = "Erro";
+        expressao = "";
+      }
+    });
+  </script>
+</body>
+</html>
