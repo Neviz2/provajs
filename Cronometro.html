@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronômetro com Date</title>
+  <style>
+    body {
+      background-color: #0a0a4b;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      gap: 20px;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #cronometro {
+      background-color: gray;
+      font-size: 32px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    button {
+      border-radius: 10px;
+      background-color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    #salvos {
+      background-color: gray;
+      width: 100%;
+      max-width: 400px;
+      min-height: 100px;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cronometro">00:00:00.00</div>
+
+  <div>
+    <button onclick="iniciar()">Iniciar</button>
+    <button onclick="pausar()">Pausar</button>
+    <button onclick="resetar()">Zerar</button>
+    <button onclick="salvar()">Salvar Tempo</button>
+    <button onclick="limpar()">Limpar</button>
+  </div>
+
+  <div id="salvos">Tempos Salvos:</div>
+
+  <script>
+    let tempoInicial;
+    let tempoPausado = 0;
+    let intervalo;
+    let historico = [];
+    
+    function formatar(tempoMs) {
+      let total = new Date(tempoMs);
+      let horas = String(total.getUTCHours()).padStart(2, '0');
+      let minutos = String(total.getUTCMinutes()).padStart(2, '0');
+      let segundos = String(total.getUTCSeconds()).padStart(2, '0');
+      let milissegundos = String(Math.floor(total.getUTCMilliseconds() / 10)).padStart(2, '0');
+      return `${horas}:${minutos}:${segundos}.${milissegundos}`;
+    }
+
+    function atualizar() {
+      let agora = Date.now();
+      let tempoDecorrido = agora - tempoInicial + tempoPausado;
+      document.getElementById("cronometro").textContent = formatar(tempoDecorrido);
+    }
+
+    function iniciar() {
+      if (!intervalo) {
+        tempoInicial = Date.now();
+        intervalo = setInterval(atualizar, 10);
+      }
+    }
+
+    function pausar() {
+      if (intervalo) {
+        clearInterval(intervalo);
+        intervalo = null;
+        tempoPausado += Date.now() - tempoInicial;
+      }
+    }
+
+    function resetar() {
+      clearInterval(intervalo);
+      intervalo = null;
+      tempoPausado = 0;
+      document.getElementById("cronometro").textContent = "00:00:00.00";
+    }
+
+    function salvar() {
+      const tempoAtual = document.getElementById("cronometro").textContent;
+      historico.push(tempoAtual);
+      document.getElementById("salvos").innerHTML = "Tempos Salvos:<br>" + historico.join("<br>");
+    }
+
+    function limpar(){
+    historico = []; 
+    window.document.getElementById("salvos").innerHTML = [] + "<p>Tempos Salvos:</p>";
+    }   
+  </script>
+
+</body>
+</html>
