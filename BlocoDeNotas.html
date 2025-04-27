@@ -52,13 +52,13 @@
 
   <textarea id="notas" placeholder="Coloque seu texto aqui:"></textarea>
 
-  <!-- Botões -->
+ 
   <div>
     <button class="btn btn-outline-light" id="salvar">Salvar Nota</button>
     <button class="btn btn-outline-light" id="limpar">Limpar Notas</button>
   </div>
 
-  <!-- Onde as notas salvas serão exibidas -->
+
   <div id="suasnotas">
     <p>Suas notas:</p>
   </div>
@@ -66,21 +66,21 @@
 
 
   <script>
-    const texto = document.querySelector("#notas");        // textarea onde a pessoa digita
-    const salvar = document.querySelector("#salvar");      // botão de salvar
-    const limpar = document.querySelector("#limpar");      // botão que limpa as notas 
-    const suasnotas = document.querySelector("#suasnotas"); // div onde as notas aparecem
+    const texto = document.querySelector("#notas");        
+    const salvar = document.querySelector("#salvar");      
+    const limpar = document.querySelector("#limpar");      
+    const suasnotas = document.querySelector("#suasnotas"); 
 
    
     let indiceEditando = null;
-    // Quando clicar em "Salvar"
+  
     salvar.addEventListener("click", () => {
       if (texto.value.trim() === "") {
         alert("Sua nota está vazia");
         return;
       }
 
-      // Recupera o que já tem no localStorage ou cria um array vazio
+     
       let notas = JSON.parse(localStorage.getItem("notas")) || [];
 
       if (indiceEditando !== null) {
@@ -90,25 +90,21 @@
             notas.push(texto.value);
             }
 
-      // Salva de volta no localStorage strngify trasforma em string o json
+      
       localStorage.setItem("notas", JSON.stringify(notas));
 
       alert("Nota salva com sucesso!");
 
-      // Limpa o campo de texto
+      
       texto.value = "";
 
-      // Atualiza a tela com as notas salvas
+     
       mostrar();
     });
 
-
-
-    // Quando clicar em "limpar limpa o localstorage porem não o texto"
     limpar.addEventListener("click", () => {
-      
+        confirm("Você tem certeza que quer apagar as notas?")
         localStorage.clear();
-        alert("Notas apagadas!");
         mostrar();
 
     });
@@ -133,10 +129,10 @@
             indiceEditando = i;
         });
         
-        suasnotas.appendChild(div);
+        suasnotas.appendChild(div); // adiciona suas notas dentro da div 
       }
     }
-    mostrar();
+    mostrar(); 
   </script>
 </body>
 </html>
